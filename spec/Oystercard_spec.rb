@@ -8,4 +8,12 @@ describe Oystercard do
     end
   end
 
+  describe "#top_up" do
+    it "increase balance by set amount" do
+      oy = Oystercard.new
+      oy.top_up(10)
+      expect(subject.balance).to eq 10.00
+    end
+  end
+
 end
