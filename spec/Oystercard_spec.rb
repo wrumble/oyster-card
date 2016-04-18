@@ -2,6 +2,7 @@ require "oystercard"
 
 describe Oystercard do
 
+
   describe "#initalize" do
     it "starts with a balance of zero" do
       expect(subject.balance).to eq 0
@@ -17,9 +18,10 @@ describe Oystercard do
   describe "#limit_reached" do
     it "raise error if #top_up(amount) puts balance over maximum limit." do
 
-      message = "Top up amount pushes you over your maximum oyster card limit."
+      message = "Top up amount pushes you over your maximum oyster card limit of £#{Oystercard::DEFAULT_LIMIT}."
       expect{ subject.top_up 91 }.to raise_error message
     end
   end
 
 end
+
