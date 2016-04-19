@@ -1,3 +1,0 @@
-describe Ostercard do
-  
-end
