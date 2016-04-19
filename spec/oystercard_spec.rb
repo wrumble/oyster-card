@@ -81,6 +81,17 @@ describe Oystercard do
     end
   end
 
+  describe '#journey_history' do
+    it 'stores all journeys in journey_history' do
+      subject.top_up(10)
+      subject.touch_in(entrystation)
+      subject.touch_out(exitstation)
+      subject.touch_in(entrystation)
+      subject.touch_out(exitstation)
+      expect(subject.journey_history).to eq [journey, journey]
+    end
+  end
+
 
 
 end
