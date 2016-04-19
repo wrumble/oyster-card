@@ -2,7 +2,7 @@ require 'oystercard'
 describe Oystercard do
   let(:entrystation) {double :entrystation}
   let(:exitstation) {double :exitstation}
-  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+  let(:journey){ {entry_station: entrystation, exit_station: exitstation} }
   describe '#initialize balance' do
     it "has a variable balance and it is set to 0 by default" do
       expect(subject.balance).to eq(0)
@@ -77,7 +77,7 @@ describe Oystercard do
       expect(subject.journeys).to eq journey
     end
     it 'starts with an empty hash' do
-      expect(subject.journeys).to eq {}
+      expect(subject.journeys).to be_empty
     end
   end
 
