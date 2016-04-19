@@ -32,7 +32,13 @@ describe Oystercard do
 
   describe '#in_journey?' do
     it 'is not in journey unless touched in' do
-      expect(subject.in_journey?).not_to be_in_journey
+      expect(subject).not_to be_in_journey
+    end
+  end
+
+  describe "#touch_in" do
+    it "makes card #in_journey to true." do
+      expect(subject.touch_in).to be_in_journey
     end
   end
 
