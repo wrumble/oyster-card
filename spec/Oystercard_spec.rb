@@ -1,9 +1,11 @@
 require "oystercard"
 
 describe Oystercard do
+  let(:min_fare) { described_class::MIN_FARE}
   let(:min_balance) { described_class::MIN_BALANCE }
   let(:default_limit) { described_class::DEFAULT_LIMIT }
   let(:oyster) { described_class.new }
+  let(:entry) { double(:station) }
 
   describe "#initalize" do
     it "starts with a balance of zero" do
@@ -25,13 +27,6 @@ describe Oystercard do
     end
   end
 
-  describe "#deduct" do
-    it "deducts the fare from balance" do
-      oyster.top_up 70
-      expect{ oyster.deduct 50 }.to change{ oyster.balance }.by -50
-    end
-  end
-
   describe '#in_journey?' do
     it 'is not in journey unless touched in' do
       expect(oyster).not_to be_in_journey
@@ -48,6 +43,11 @@ describe Oystercard do
       message = "Must have more than £#{min_balance} on your card to touch in."
       expect{ oyster.touch_in }.to raise_error message
     end
+    it "store a value into entry_station variable" do
+      oyster.top_up default_limit
+      oyster.touch_in(:entry)
+      expect(oyster.entry_station).to be :entry
+    end
   end
 
   describe '#touch_out' do
@@ -62,7 +62,7 @@ describe Oystercard do
     end
 
     it 'deducts the min fare on touch out' do
-      expect{ oyster.touch_out }.to change{ oyster.balance }.by -min_balance
+      expect{ oyster.touch_out }.to change{ oyster.balance }.by -min_fare
     end
   end
 
