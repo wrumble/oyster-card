@@ -26,7 +26,13 @@ describe Oystercard do
   describe "#deduct" do
     it "deducts the fare from balance" do
       subject.top_up 70
-      expect{ subject.deduct 50 }.to change{ subject.balance }.by 20
+      expect{ subject.deduct 50 }.to change{ subject.balance }.by -50
+    end
+  end
+
+  describe '#in_journey?' do
+    it 'is not in journey unless touched in' do
+      expect(subject.in_journey?).not_to be_in_journey
     end
   end
 
