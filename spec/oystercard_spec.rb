@@ -39,7 +39,7 @@ describe Oystercard do
     it "remembers the station after it touched in" do
       subject.top_up(5)
       subject.touch_in(entrystation)
-      expect(subject.entry_station).to eq entrystation
+      expect(subject.journeys[:entry_station]).to eq entrystation
     end
   end
 
