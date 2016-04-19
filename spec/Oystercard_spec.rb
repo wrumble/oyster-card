@@ -11,6 +11,9 @@ describe Oystercard do
     it "starts with a balance of zero" do
       expect(oyster.balance).to eq 0
     end
+    it "creates and empty array of journeys." do
+      expect(oyster.journeys).to be_empty
+    end
   end
 
   describe "#top_up" do
@@ -69,6 +72,7 @@ describe Oystercard do
       oyster.touch_out
       expect(oyster.entry_station).to be nil
     end
+
   end
 
 end
