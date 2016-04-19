@@ -20,7 +20,13 @@ describe Oystercard do
   describe '#deduct' do
     it {is_expected.to respond_to(:deduct)}
     it "reduces the balance by a specified amount" do
-      expect {subject.deduct(3)}.to change{subject.balance}.by(3)
+      expect {subject.deduct(3)}.to change{subject.balance}.by(-3)
+    end
+  end
+
+  describe '#in_journey?' do
+    it "returns false if we are not in a journey" do
+      expect(subject.in_journey?).to eq false
     end
   end
 
