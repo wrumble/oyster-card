@@ -2,6 +2,7 @@ require 'oystercard'
 describe Oystercard do
   let(:entrystation) {double :entrystation}
   let(:exitstation) {double :exitstation}
+  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
   describe '#initialize balance' do
     it "has a variable balance and it is set to 0 by default" do
       expect(subject.balance).to eq(0)
@@ -46,17 +47,17 @@ describe Oystercard do
     it "returns false on in_journey" do
       subject.top_up(5)
       subject.touch_in(entrystation)
-      subject.touch_out
+      subject.touch_out(exitstation)
       expect(subject.in_journey?).to eq false
     end
 
     it "reduces the balance by minimum fare" do
-      expect {subject.touch_out}.to change{subject.balance}.by(-Oystercard::MIN_FARE)
+      expect {subject.touch_out(exitstation)}.to change{subject.balance}.by(-Oystercard::MIN_FARE)
     end
     it "sets entry_station to nil" do
       subject.top_up(5)
       subject.touch_in(entrystation)
-      subject.touch_out
+      subject.touch_out(exitstation)
       expect(subject.entry_station).to eq nil
     end
     it "remembers the last station" do
@@ -66,5 +67,20 @@ describe Oystercard do
       expect(subject.exit_station).to eq exitstation
     end
   end
+
+  describe '#journeys' do
+    it "stores entry and exit stations in a hash" do
+
+      subject.top_up(5)
+      subject.touch_in(entrystation)
+      subject.touch_out(exitstation)
+      expect(subject.journeys).to eq journey
+    end
+    it 'starts with an empty hash' do
+      expect(subject.journeys).to eq {}
+    end
+  end
+
+
 
 end
