@@ -5,7 +5,6 @@ describe Oystercard do
   let(:min_balance) { described_class::MIN_BALANCE }
   let(:default_limit) { described_class::DEFAULT_LIMIT }
   let(:oyster) { described_class.new }
-  let(:zone) { double(:station) }
   let(:entry) { double(:station) }
   let(:exit) { double(:station) }
 
@@ -35,30 +34,36 @@ describe Oystercard do
   describe "#touch_in" do
     it "raises error message if balance is too low" do
       message = "Must have more than £#{min_balance} on your card to touch in."
-      expect{ oyster.touch_in(:entry, :zone) }.to raise_error message
-    end
-    it "creates an entry station." do
-      oyster.top_up 10
-      oyster.touch_in(:entry, :zone)
-      expect(oyster.entry_station).to_not be nil
+      expect{ oyster.touch_in(:entry) }.to raise_error message
     end
 
+    it "creates an new journey." do
+      oyster.top_up 10
+      oyster.touch_in(:entry)
+      expect(oyster.current_journey).to_not be nil
+    end
   end
 
   describe '#touch_out' do
     before do
       oyster.top_up(default_limit)
-      oyster.touch_in(:entry, :zone)
+      oyster.touch_in(:entry)
     end
 
-    xit 'deducts the min fare on touch out' do
-      expect{ oyster.touch_out(:touch_out) }.to change{ oyster.balance }.by -min_fare
+    it 'receives the fare from journey' do
+      oyster.touch_out(:exit)
+      expect(oyster.fare).not_to be nil
     end
-    it "creates an exit station." do
-      oyster.touch_out(:exit, :zone)
-      expect(oyster.exit_station).to_not be nil
-    end
+  end
 
+  describe '#charge_fare' do
+    it 'reduces balance by fare amount' do
+      oyster.top_up(default_limit)
+      oyster.touch_in(:entry)
+      oyster.touch_out(:exit)
+      expect{ oyster.charge_fare }.to change{ oyster.balance }. by -1
+
+    end
   end
 
 end

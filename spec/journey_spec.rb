@@ -2,6 +2,7 @@ require "journey"
 
 describe Journey do
   let(:journey) { described_class.new(:entry_station) }
+  let(:exit) { double(:exit_station) }
 
   describe '#initialize' do
     it 'sets in_journey status to true' do
@@ -10,6 +11,12 @@ describe Journey do
 
     it 'store a value into entry_station variable' do
       expect(journey.entry_station).to be :entry_station
+    end
+  end
+
+  describe '#complete_journey' do
+    it 'returns minimum fare if journey complete' do
+      expect(journey.complete_journey(:exit)).to eq 1
     end
   end
 

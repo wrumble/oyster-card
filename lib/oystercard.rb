@@ -2,7 +2,7 @@ require_relative 'station'
 
 class Oystercard
 
-  attr_reader :balance, :entry_station, :exit_station, :journeys
+  attr_reader :balance, :current_journey, :journeys, :fare
 
   DEFAULT_LIMIT = 90.00
   MIN_BALANCE = 1.00
@@ -18,27 +18,23 @@ class Oystercard
     @balance += money
   end
 
-  def touch_in(station, zone)
+  def touch_in(station)
     fail "Must have more than £#{MIN_BALANCE} on your card to touch in." if not_enough_balance?
-
-    @entry_station = Station.new(station,zone)
-
+    @current_journey = Journey.new(station)
   end
 
-  def touch_out(station, zone)
-    #deduct(MIN_FARE)
-    @exit_station = Station.new(station, zone)
-    create_journey
+  def touch_out(station)
+    @fare = current_journey.complete_journey(station)
+    charge_fare
+  end
 
+  def charge_fare
+    @balance -= @fare
   end
 
   #def create_journey
   #   journey = Journey.new (@entry_station, @exit_station)
   #   charge_fare
-  #end
-
-  #def charge_fare
-  #   @balance -= journey.fare
   #end
 
 private
