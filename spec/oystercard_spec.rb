@@ -14,7 +14,7 @@ describe Oystercard do
       limit = Oystercard::LIMIT
       subject.top_up(limit)
       message = "you are trying to top-up with the amount that is over the limit"
-      expect {subject.top_up}.to raise_error message
+      expect {subject.top_up(1)}.to raise_error message
     end
   end
 
