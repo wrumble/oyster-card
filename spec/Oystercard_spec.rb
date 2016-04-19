@@ -36,12 +36,12 @@ describe Oystercard do
   describe "#touch_in" do
     it "sets card #in_journey to true." do
       oyster.top_up(default_limit)
-      oyster.touch_in
+      oyster.touch_in(:entry)
       expect(oyster).to be_in_journey
     end
     it "raises error message if balance is too low" do
       message = "Must have more than £#{min_balance} on your card to touch in."
-      expect{ oyster.touch_in }.to raise_error message
+      expect{ oyster.touch_in(:entry) }.to raise_error message
     end
     it "store a value into entry_station variable" do
       oyster.top_up default_limit
@@ -53,7 +53,7 @@ describe Oystercard do
   describe '#touch_out' do
     before do
       oyster.top_up(default_limit)
-      oyster.touch_in
+      oyster.touch_in(:entry)
     end
 
     it 'sets card #in_journey to false' do
@@ -63,6 +63,11 @@ describe Oystercard do
 
     it 'deducts the min fare on touch out' do
       expect{ oyster.touch_out }.to change{ oyster.balance }.by -min_fare
+    end
+
+    it 'sets #entry_station to nil on touch out' do
+      oyster.touch_out
+      expect(oyster.entry_station).to be nil
     end
   end
 
