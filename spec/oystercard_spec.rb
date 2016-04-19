@@ -27,12 +27,12 @@ describe Oystercard do
   describe '#touch_in' do
     it "returns true on in_journey" do
       subject.top_up(5)
-      subject.touch_in
+      subject.touch_in(station)
       expect(subject.in_journey?).to eq true
     end
     it "raises an error if the min balance less the £1" do
       min = Oystercard::MIN_BAL
-      expect {subject.touch_in}.to raise_error "min balance has to be >£#{min}"
+      expect {subject.touch_in(station)}.to raise_error "min balance has to be >£#{min}"
     end
     it "remembers the station after it touched in" do
       subject.top_up(5)
@@ -44,13 +44,19 @@ describe Oystercard do
   describe '#touch_out' do
     it "returns false on in_journey" do
       subject.top_up(5)
-      subject.touch_in
+      subject.touch_in(station)
       subject.touch_out
       expect(subject.in_journey?).to eq false
     end
 
     it "reduces the balance by minimum fare" do
       expect {subject.touch_out}.to change{subject.balance}.by(-Oystercard::MIN_FARE)
+    end
+    it "sets entry_station to nil" do
+      subject.top_up(5)
+      subject.touch_in(station)
+      subject.touch_out
+      expect(subject.entry_station).to eq nil
     end
   end
 
