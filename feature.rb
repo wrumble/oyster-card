@@ -11,4 +11,8 @@ oystercard.top_up(3)
 # As a customer
 # I want a maximum limit (of £90) on my card
 
-capacity = 
+oystercard.top_up(91)
+
+# In order to pay for my journey
+# As a customer
+# I need my fare deducted from my card

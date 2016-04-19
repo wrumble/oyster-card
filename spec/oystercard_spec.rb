@@ -13,8 +13,14 @@ describe Oystercard do
     it "is raises an error if the top-up exceeds the limit" do
       limit = Oystercard::LIMIT
       subject.top_up(limit)
-      message = "you are trying to top-up with the amount that is over the limit"
+      message = "maximum limit is £#{limit}"
       expect {subject.top_up(1)}.to raise_error message
+    end
+  end
+  describe '#deduct' do
+    it {is_expected.to respond_to(:deduct)}
+    it "reduces the balance by a specified amount" do
+      expect {subject.deduct(3)}.to change{subject.balance}.by(3)
     end
   end
 
