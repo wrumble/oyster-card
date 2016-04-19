@@ -1,6 +1,7 @@
 require 'oystercard'
 describe Oystercard do
-  let(:station) {double :station}
+  let(:entrystation) {double :entrystation}
+  let(:exitstation) {double :exitstation}
   describe '#initialize balance' do
     it "has a variable balance and it is set to 0 by default" do
       expect(subject.balance).to eq(0)
@@ -27,24 +28,24 @@ describe Oystercard do
   describe '#touch_in' do
     it "returns true on in_journey" do
       subject.top_up(5)
-      subject.touch_in(station)
+      subject.touch_in(entrystation)
       expect(subject.in_journey?).to eq true
     end
     it "raises an error if the min balance less the £1" do
       min = Oystercard::MIN_BAL
-      expect {subject.touch_in(station)}.to raise_error "min balance has to be >£#{min}"
+      expect {subject.touch_in(entrystation)}.to raise_error "min balance has to be >£#{min}"
     end
     it "remembers the station after it touched in" do
       subject.top_up(5)
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+      subject.touch_in(entrystation)
+      expect(subject.entry_station).to eq entrystation
     end
   end
 
   describe '#touch_out' do
     it "returns false on in_journey" do
       subject.top_up(5)
-      subject.touch_in(station)
+      subject.touch_in(entrystation)
       subject.touch_out
       expect(subject.in_journey?).to eq false
     end
@@ -54,9 +55,15 @@ describe Oystercard do
     end
     it "sets entry_station to nil" do
       subject.top_up(5)
-      subject.touch_in(station)
+      subject.touch_in(entrystation)
       subject.touch_out
       expect(subject.entry_station).to eq nil
+    end
+    it "remembers the last station" do
+      subject.top_up(5)
+      subject.touch_in(entrystation)
+      subject.touch_out(exitstation)
+      expect(subject.exit_station).to eq exitstation
     end
   end
 
