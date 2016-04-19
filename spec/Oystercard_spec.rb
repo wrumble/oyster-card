@@ -6,6 +6,7 @@ describe Oystercard do
   let(:default_limit) { described_class::DEFAULT_LIMIT }
   let(:oyster) { described_class.new }
   let(:entry) { double(:station) }
+  let(:exit) { double(:station) }
 
   describe "#initalize" do
     it "starts with a balance of zero" do
@@ -60,16 +61,16 @@ describe Oystercard do
     end
 
     it 'sets card #in_journey to false' do
-      oyster.touch_out
+      oyster.touch_out(:touch_out)
       expect(oyster).not_to be_in_journey
     end
 
     it 'deducts the min fare on touch out' do
-      expect{ oyster.touch_out }.to change{ oyster.balance }.by -min_fare
+      expect{ oyster.touch_out(:touch_out) }.to change{ oyster.balance }.by -min_fare
     end
 
     it 'sets #entry_station to nil on touch out' do
-      oyster.touch_out
+      oyster.touch_out(:touch_out)
       expect(oyster.entry_station).to be nil
     end
   end
@@ -78,9 +79,13 @@ describe Oystercard do
     before do
       oyster.top_up(default_limit)
       oyster.touch_in(:entry)
+      oyster.touch_out(:exit)
     end
     it 'current_journey hash includes entry_station' do
       expect(oyster.journeys[0]).to include :entry
+    end
+    it 'current_journey hash includes exit_station' do
+      expect(oyster.journeys[0][:entry]).to be :exit
     end
   end
 
