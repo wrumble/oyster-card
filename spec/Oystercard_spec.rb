@@ -72,7 +72,16 @@ describe Oystercard do
       oyster.touch_out
       expect(oyster.entry_station).to be nil
     end
+  end
 
+  describe '#current_journey' do
+    before do
+      oyster.top_up(default_limit)
+      oyster.touch_in(:entry)
+    end
+    it 'current_journey hash includes entry_station' do
+      expect(oyster.journeys[0]).to include :entry
+    end
   end
 
 end
