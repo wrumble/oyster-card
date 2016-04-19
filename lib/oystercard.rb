@@ -9,8 +9,7 @@ class Oystercard
     @balance = 0
     @entry_station = nil
     @exit_station = nil
-    @journeys = {}
-    @journey_history = []
+    @journeys = []
   end
 
   def top_up(amount)
@@ -19,23 +18,22 @@ class Oystercard
   end
 
   def in_journey?
-    !!@entry_station
+    if @journey_history.empty?
+      false
+    elsif @journey_history
+    end
   end
 
   def touch_in(station)
     fail "min balance has to be >£#{MIN_BAL}" if @balance < MIN_BAL
-    @entry_station = station
-    @journeys[:entry_station] = station
+    @journeys << {:entry_station => station}
   end
 
   def touch_out(station)
     deduct(MIN_FARE)
-    @entry_station = nil
-    @exit_station = station
-    @journeys[:exit_station] = station
-    @journey_history << @journeys
-
+    @journeys.last.merge!(:exit_station => station)
   end
+
   private
   def deduct(amount)
     @balance -= amount

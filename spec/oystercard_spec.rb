@@ -74,7 +74,7 @@ describe Oystercard do
       subject.top_up(5)
       subject.touch_in(entrystation)
       subject.touch_out(exitstation)
-      expect(subject.journeys).to eq journey
+      expect(subject.journeys).to eq [journey]
     end
     it 'starts with an empty hash' do
       expect(subject.journeys).to be_empty
