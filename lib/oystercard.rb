@@ -1,3 +1,5 @@
+require_relative 'station'
+
 class Oystercard
 
   attr_reader :balance, :entry_station, :journeys
@@ -16,19 +18,15 @@ class Oystercard
     @balance += money
   end
 
-  def in_journey?
-   !!@entry_station
-  end
-
   def touch_in(station)
     fail "Must have more than £#{MIN_BALANCE} on your card to touch in." if not_enough_balance?
-    @entry_station = station
+    #@entry_station = station
   end
 
   def touch_out(station)
     deduct(MIN_FARE)
-    current_journey(station)
-    @entry_station = nil
+    # current_journey(station)
+    #@entry_station = nil
   end
 
 private
@@ -43,10 +41,6 @@ private
 
   def deduct(fare)
     @balance -= fare
-  end
-
-  def current_journey(exit_station)
-    @journeys << { @entry_station => exit_station }
   end
 
 end
