@@ -41,6 +41,10 @@ describe Oystercard do
       subject.touch_in
       expect(subject).to be_in_journey
     end
+    it "raises error message if balnce is too low" do
+      message = "Must have more than £#{Oystercard::MIN_BALANCE} on your card to touch in."
+      expect{ subject.touch_in }.to raise_error message
+    end
   end
 
   describe '#touch_out' do
