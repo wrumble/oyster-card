@@ -1,5 +1,6 @@
 require 'oystercard'
 describe Oystercard do
+  let(:station) {double :station}
   describe '#initialize balance' do
     it "has a variable balance and it is set to 0 by default" do
       expect(subject.balance).to eq(0)
@@ -17,12 +18,6 @@ describe Oystercard do
       expect {subject.top_up(1)}.to raise_error message
     end
   end
-  describe '#deduct' do
-    it {is_expected.to respond_to(:deduct)}
-    it "reduces the balance by a specified amount" do
-      expect {subject.deduct(3)}.to change{subject.balance}.by(-3)
-    end
-  end
 
   describe '#in_journey?' do
     it "returns false if we are not in a journey" do
@@ -36,8 +31,13 @@ describe Oystercard do
       expect(subject.in_journey?).to eq true
     end
     it "raises an error if the min balance less the £1" do
-      min = Oystercard::MIN
+      min = Oystercard::MIN_BAL
       expect {subject.touch_in}.to raise_error "min balance has to be >£#{min}"
+    end
+    it "remembers the station after it touched in" do
+      subject.top_up(5)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq station
     end
   end
 
@@ -50,7 +50,7 @@ describe Oystercard do
     end
 
     it "reduces the balance by minimum fare" do
-      expect {subject.touch_out}.to change{subject.balance}.by(-1)
+      expect {subject.touch_out}.to change{subject.balance}.by(-Oystercard::MIN_FARE)
     end
   end
 
