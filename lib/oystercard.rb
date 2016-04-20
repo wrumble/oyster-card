@@ -1,6 +1,6 @@
 class Oystercard
 
-  attr_reader :balance, :entry_station, :exit_station, :journeys, :journey_history
+  attr_reader :balance, :journeys, :journey_history
   LIMIT = 90
   MIN_BAL = 1
   MIN_FARE = 1
@@ -18,10 +18,7 @@ class Oystercard
   end
 
   def in_journey?
-    if @journey_history.empty?
-      false
-    elsif @journey_history
-    end
+    @journeys.empty? ? false : @journeys.last.length < 2
   end
 
   def touch_in(station)
