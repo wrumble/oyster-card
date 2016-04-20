@@ -18,19 +18,13 @@ class Oystercard
 
   def touch_in(station)
     fail "min balance has to be >£#{MIN_BAL}" if @balance < MIN_BAL
-    #@journeys << {:entry_station => station}
     @journey.entry_station(station)
 
   end
 
   def touch_out(station)
     deduct(MIN_FARE)
-    #@journeys.last.merge!(:exit_station => station)
     @journey.exit_station(station)
-  end
-
-  def journey_log
-    @journey.journeys
   end
 
   private
