@@ -55,4 +55,21 @@ describe Journey do
         expect(subject.journeys.first[:entry_station]).to eq entrystation
       end
     end
+
+    describe "#fare" do
+      it "returns minimum fare" do
+        subject.entry_station(entrystation)
+        subject.exit_station(exitstation)
+        expect(subject.fare).to eq 1
+      end
+      it "returns 6 if entry only" do
+        subject.entry_station(entrystation)
+        subject.entry_station(entrystation)
+        expect(subject.fare).to eq 6
+      end
+      it "returns 6 if exit only" do
+        subject.exit_station(exitstation)
+        expect(subject.fare).to eq 6
+      end
+    end
 end
